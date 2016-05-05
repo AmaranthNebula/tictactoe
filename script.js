@@ -9,7 +9,52 @@ $(document).ready(function() {
    var currentGame = [["","",""],
                       ["","",""],
                       ["","",""]];
-   computersMove();
+   
+   
+   
+   
+   //event handlers to choose player symbol
+   $(".chooseButton").click(function(e){
+       //get player's choice
+      var playerChoice = this.name;
+      //update playerKey with the above information
+      if (playerChoice === "X") {
+          playerKey.C = "O";
+          playerKey.H = "X";
+      }else {
+          playerKey.C = "X";
+          playerKey.H = "O";
+      }
+        //call function to start game
+        newGame();
+   });
+   
+   // this function starts a new game
+   function newGame() {
+       //hide option panel
+       $("#choosePlayer").css("display", "none");
+       // computers makes the first move 
+      computersMove(); 
+       
+   }
+   // this function resets all values and to start a new game
+   function resetGame() {
+       // clear board of previous moves
+       currentGame = [["","",""],
+                      ["","",""],
+                      ["","",""]];
+                      
+        // re-enable all buttons
+        $("#container button").prop("disabled", false);
+        // clear buttons
+        $(".gameMove").text("");
+        // remove winning styling
+        $(".gameMove").removeClass("winningMove");
+        
+        //show options panel
+        $("#choosePlayer").css("display", "inline-block");
+   }   
+   
       //button event handler
    $("#container button").click(function(e){
        // call function to update display
@@ -26,7 +71,7 @@ $(document).ready(function() {
        var buttonName = coord[0] + "_" + coord[1];
        
        // disable button
-        $("button[name=" + buttonName + "]").prop("disabled", "true");
+        $("button[name=" + buttonName + "]").prop("disabled", true);
         
         //update button with player icon
         $("button[name=" + buttonName + "]").text(playerKey[player]);
@@ -84,7 +129,7 @@ $(document).ready(function() {
    function endGame(winningCoords) {
        if (winningCoords !== undefined) {
             //disable all buttons
-            $("button").prop("disabled", "true");
+            $("#container button").prop("disabled", true);
             //set winning styling
             // go through all winning buttons
             for (var i=0; i < 3; i++) {
@@ -94,28 +139,10 @@ $(document).ready(function() {
    
        }
        
+       //after 1 second/ start a new game
        setTimeout(function() {
-           console.log("new game");
-           //after 2 seconds call function to reset game
-           // newGame();
-       },1500);
-   }
-   
-   
-   
-   // this function resets all values and to start a new game
-   function resetGame() {
-       // clear board of previous moves
-       currentGame = [["","",""],
-                      ["","",""],
-                      ["","",""]];
-                      
-        // re-enable all buttons
-        $("button").prop("disabled", "false");
-        // clear buttons
-        $("button").text("");
-        // remove winning styling
-        $("button").removeClass("winningMove");
+           resetGame();
+       },1000);
    }
    
    
@@ -262,7 +289,7 @@ $(document).ready(function() {
             "width": gridHeight + "px",
        });
        //set button size and font size
-       $("button").css({
+       $(".gameMove").css({
             "height": buttonSize + "px",
             "min-height": buttonSize + "px",
             "width": buttonSize + "px",
@@ -282,6 +309,16 @@ $(document).ready(function() {
             "padding-top": paddingHeight + "px",
             "padding-bottom": paddingHeight + "px"            
        });
+       
+       // if choose panel is visible; center panel on screen
+       if($("#option").css("display") === "inline-block") {
+           var optionPanelHeight = $("#option").outerHeight();
+           // padding is half of the space between window height and the options panel height
+           var choosePlayerPadding = (height - optionPanelHeight)/2;
+           
+           $("#choosePlayer").css("padding-top", choosePlayerPadding + "px");
+       }
+       
        
    } // end of resize elements
    

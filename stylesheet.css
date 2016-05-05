@@ -21,7 +21,7 @@ html, body {
     width: 480px;
     margin: auto;
 }
-button {
+.gameMove {
     background-color: transparent;
     -moz-box-sizing: content-box;
     -webkit-box-sizing: content-box;    
@@ -37,8 +37,11 @@ button {
     font-size: 122px;
     color: rgba(32, 28, 21,0.9);
 }
-button:disabled:hover{
+.gameMove:disabled:hover{
     background-color: transparent;
+}
+.gameMove:hover {
+    background-color: rgba(203, 191, 174,0.6);
 }
 .winningMove {
     color: rgba(203, 191, 174,0.8);
@@ -54,6 +57,39 @@ button:disabled:hover{
     border-color: rgba(32, 28, 21,0.9);
 }
 
-button:hover {
-    background-color: rgba(203, 191, 174,0.6);
+
+
+#choosePlayer {
+    -mox-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(32, 28, 31,0.95);
+    text-align: center;
+}
+#option {
+    display: inline-block;
+    margin: auto;
+    background-color: #DDD;
+    padding: 2em;
+    font-size: 1em;
+}
+.chooseButton {
+    margin: 0.2em;
+    color: #DDD;
+    background-color: rgba(32, 28, 21,1);
+    border: none;
+    outline: none;
+    font-size: 2em;
+    padding: 0em 1.5em;
+}
+.chooseButton:hover {
+    background-color: rgb(53, 50, 46);
+}
+.chooseButton:disabled {
+    background-color: red;
 }
