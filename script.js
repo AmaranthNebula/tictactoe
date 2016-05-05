@@ -31,14 +31,17 @@ $(document).ready(function() {
         //update button with player icon
         $("button[name=" + buttonName + "]").text(playerKey[player]);
         //update game array with current player
-        currentGame[coord[0]][coord[1]] = player;       
+        currentGame[coord[0]][coord[1]] = player;    
+        
+        //determine if game is over
+        isGameOver(coord, player);   
    }
    
    function computersMove() {
        var availableMoves = getAvailableMoves(currentGame);
        var nextMove;
-       //for first two moves have the computer choose a move at random
-       if (availableMoves.length > 7) {
+       //for first move have the computer choose a move at random
+       if (availableMoves.length === 9) {
            var randomIndex = Math.floor(Math.random() * (availableMoves.length - 0) + 0);
            nextMove = availableMoves[randomIndex];
        }else {
@@ -49,19 +52,70 @@ $(document).ready(function() {
        updateGameBoardDisplay(nextMove, "C");
    }
    
+   function isGameOver(lastMove, player) {
+       var row = lastMove[0];
+       var column = lastMove[1];
+       var available = getAvailableMoves(currentGame);
+       
+       // check for horizontal/row winner
+       if (currentGame[row][0] === player && currentGame[row][1] === player && currentGame[row][2] === player) {
+           endGame([[row, 0],[row, 1],[row, 2]]);
+       }
+       // check for vertical/ column winner
+       else if (currentGame[0][column] === player && currentGame[1][column] === player && currentGame[2][column] === player) {
+           endGame([[0, column],[1, column],[2, column]]);
+       }
+       // check for left to right diagonal winner
+       else if (currentGame[0][0] === player && currentGame[1][1] === player && currentGame[2][2] === player) {
+           endGame([[0,0],[1,1],[2,2]]);
+       }
+       // check for right to left diagonal winner
+       else if (currentGame[0][2] === player && currentGame[1][1] === player && currentGame[2][0] === player) {
+           endGame([[0,2],[1,1],[2,0]]);
+       }
+       // if game is a draw
+       else if (available.length === 0) {
+           endGame();
+       }
+       
+   }
+   //this function is called after a game is over
+   //
+   function endGame(winningCoords) {
+       if (winningCoords !== undefined) {
+            //disable all buttons
+            $("button").prop("disabled", "true");
+            //set winning styling
+            // go through all winning buttons
+            for (var i=0; i < 3; i++) {
+                var currentName = winningCoords[i][0] + "_" + winningCoords[i][1];
+                $("button[name=" + currentName + "]").addClass("winningMove");  
+            }
    
+       }
+       
+       setTimeout(function() {
+           console.log("new game");
+           //after 2 seconds call function to reset game
+           // newGame();
+       },1500);
+   }
    
    
    
    // this function resets all values and to start a new game
    function resetGame() {
+       // clear board of previous moves
        currentGame = [["","",""],
                       ["","",""],
                       ["","",""]];
                       
-    $("button").prop("disabled", "false");
-    $("button").text("");
-       
+        // re-enable all buttons
+        $("button").prop("disabled", "false");
+        // clear buttons
+        $("button").text("");
+        // remove winning styling
+        $("button").removeClass("winningMove");
    }
    
    

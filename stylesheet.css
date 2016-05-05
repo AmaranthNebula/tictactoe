@@ -40,6 +40,9 @@ button {
 button:disabled:hover{
     background-color: transparent;
 }
+.winningMove {
+    color: rgba(203, 191, 174,0.8);
+}
 .borderTopBottom {
     border-top: 12px solid;
     border-bottom: 12px solid;    
