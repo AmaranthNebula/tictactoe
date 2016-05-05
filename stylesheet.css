@@ -90,6 +90,3 @@ html, body {
 .chooseButton:hover {
     background-color: rgb(53, 50, 46);
 }
-.chooseButton:disabled {
-    background-color: red;
-}
