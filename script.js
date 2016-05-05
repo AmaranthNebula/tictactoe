@@ -1,6 +1,71 @@
 $(document).ready(function() {
    // resize elements when page first loads  
    resizeElements();
+   // have user choose x or o
+   
+   //player key
+   var playerKey = {"C": "X", "H": "O"}
+   
+   var currentGame = [["","",""],
+                      ["","",""],
+                      ["","",""]];
+   computersMove();
+      //button event handler
+   $("#container button").click(function(e){
+       // call function to update display
+       updateGameBoardDisplay(this.name.split("_"), "H");
+       // function for computer's move
+       computersMove();
+   });
+   
+   // this function updates the display
+   // updates the currentGame array
+   // disables appropriate button
+   function updateGameBoardDisplay(coord, player) {
+       // create button's name
+       var buttonName = coord[0] + "_" + coord[1];
+       
+       // disable button
+        $("button[name=" + buttonName + "]").prop("disabled", "true");
+        
+        //update button with player icon
+        $("button[name=" + buttonName + "]").text(playerKey[player]);
+        //update game array with current player
+        currentGame[coord[0]][coord[1]] = player;       
+   }
+   
+   function computersMove() {
+       var availableMoves = getAvailableMoves(currentGame);
+       var nextMove;
+       //for first two moves have the computer choose a move at random
+       if (availableMoves.length > 7) {
+           var randomIndex = Math.floor(Math.random() * (availableMoves.length - 0) + 0);
+           nextMove = availableMoves[randomIndex];
+       }else {
+           // call AI function
+           var moveAI = getNextMove(currentGame);
+           nextMove = moveAI.position;
+       }
+       updateGameBoardDisplay(nextMove, "C");
+   }
+   
+   
+   
+   
+   
+   // this function resets all values and to start a new game
+   function resetGame() {
+       currentGame = [["","",""],
+                      ["","",""],
+                      ["","",""]];
+                      
+    $("button").prop("disabled", "false");
+    $("button").text("");
+       
+   }
+   
+   
+   
    //tic tac toe AI function
    function getNextMove(pastMoves, depth) {
         // check if the computer won
@@ -117,9 +182,7 @@ $(document).ready(function() {
         return available;
     } // end of getAvailableMoves    
     
-    
-    
-   
+  
    
    // resizes grid and buttons to fit on screen
    // and centers grid on window
